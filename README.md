@@ -4,6 +4,8 @@
 CPU Scheduling: **FCFS, SJF (non-preemptive), SRTF (preemptive), Priority (preemptive or non-preemptive)**
 Language: Python 3.8+ (no extra libraries needed)
 
+Deomampo, Dela Cruz, Maningas, Rosete, Adao
+
 ---
 
 ## 1. Files
