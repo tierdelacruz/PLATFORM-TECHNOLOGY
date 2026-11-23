@@ -21,4 +21,27 @@ class App(tk.Tk):
         self._build_results()
         self.load_sample()
 
-    def
+    def _build_options(self):
+        box = ttk.LabelFrame(self, text="Select Algorithm")
+        box.pack(fill="x", padx=10, pady=(10, 4))
+
+        ttk.Label(box, text="Algorithm:").grid(row=0, column=0, padx=6, pady=6, sticky="e")
+        self.algo = ttk.Combobox(box, state="readonly", width=12,
+                                 values=["FCFS", "SJF", "SRTF", "Priority"])
+        self.algo.current(0)
+        self.algo.grid(row=0, column=1, padx=6)
+        self.algo.bind("<<ComboboxSelected>>", self._algo_changed)
+
+        ttk.Label(box, text="Priority mode:").grid(row=0, column=2, padx=6, sticky="e")
+        self.mode = ttk.Combobox(box, state="disabled", width=15,
+                                 values=["Non-Preemptive", "Preemptive"])
+        self.mode.current(0)
+        self.mode.grid(row=0, column=3, padx=6)
+
+        ttk.Label(box, text="Tie-breaking:").grid(row=0, column=4, padx=6, sticky="e")
+        self.tie = ttk.Combobox(box, state="readonly", width=32, values=list(TIE_TEXT))
+        self.tie.current(0)
+        self.tie.grid(row=0, column=5, padx=6)
+
+        ttk.Label(box, text="Note: for Priority, a smaller number means higher priority.",
+                  foreground="#555").grid(row=1, column=0, columnspan=6, sticky="w", padx=6, pady=(0, 6))
