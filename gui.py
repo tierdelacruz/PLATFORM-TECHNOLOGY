@@ -45,3 +45,14 @@ class App(tk.Tk):
 
         ttk.Label(box, text="Note: for Priority, a smaller number means higher priority.",
                   foreground="#555").grid(row=1, column=0, columnspan=6, sticky="w", padx=6, pady=(0, 6))
+      
+    def _build_process_table(self):
+        box = ttk.LabelFrame(self, text="Process Information")
+        box.pack(fill="x", padx=10, pady=4)
+
+        cols = ("pid", "at", "bt", "pr")
+        self.table = ttk.Treeview(box, columns=cols, show="headings", height=5)
+        for c, title in zip(cols, ("Process ID", "Arrival Time", "Burst Time", "Priority")):
+            self.table.heading(c, text=title)
+            self.table.column(c, width=120, anchor="center")
+        self.table.grid(row=0, column=0, columnspan=8, padx=6, pady=6, sticky="ew")
