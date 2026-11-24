@@ -71,3 +71,18 @@ class App(tk.Tk):
         ttk.Button(bar, text="Load Sample", command=self.load_sample).pack(side="left", padx=4)
         ttk.Button(bar, text="\u25B6 Run Simulation", command=self.run_one).pack(side="left", padx=(24, 4))
         ttk.Button(bar, text="Compare All", command=self.run_compare).pack(side="left", padx=4)
+
+    def _build_results(self):
+        self.status = tk.StringVar(value="Ready. Add processes, then press Run Simulation.")
+        self.status_label = tk.Label(self, textvariable=self.status, anchor="w",
+                                     bg="#eef3f8", fg="#123", padx=8, pady=4)
+        self.status_label.pack(fill="x", padx=10, pady=(4, 0))
+
+        notebook = ttk.Notebook(self)
+        notebook.pack(fill="both", expand=True, padx=10, pady=8)
+        self.tab_result = ttk.Frame(notebook)
+        self.tab_compare = ttk.Frame(notebook)
+        notebook.add(self.tab_result, text="Results")
+        notebook.add(self.tab_compare, text="Comparison")
+        self.notebook = notebook
+
