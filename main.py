@@ -60,3 +60,16 @@ def print_input(procs, tie):
         print(f"{p.pid:<9}{p.at:>5}{p.bt:>5}{p.pr:>6}")
     print("Tie-breaking rule:", "earlier arrival, then input order" if tie == "arrival"
           else "smaller process ID")
+
+# ---------------------------------------------------------------- output helpers
+def print_result(r):
+    print("\n" + LINE)
+    print(f"CPU SCHEDULING - {r.algorithm.upper()}")
+    print(LINE)
+    print("\nGantt Chart\n")
+    print(gantt_text(r.timeline))
+    print("\n" + results_table(r))
+    print(f"\nAverage Turnaround Time: {r.avg_tat:.2f}")
+    print(f"Average Waiting Time:    {r.avg_wt:.2f}")
+    print(f"Average Response Time:   {r.avg_rt:.2f}")
+    print(f"CPU Utilization:         {r.cpu_utilization:.2f}%")
