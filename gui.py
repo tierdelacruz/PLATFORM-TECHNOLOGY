@@ -56,3 +56,18 @@ class App(tk.Tk):
             self.table.heading(c, text=title)
             self.table.column(c, width=120, anchor="center")
         self.table.grid(row=0, column=0, columnspan=8, padx=6, pady=6, sticky="ew")
+      
+        self.e_pid, self.e_at, self.e_bt, self.e_pr = (ttk.Entry(box, width=10) for _ in range(4))
+        for k, (lab, ent) in enumerate((("ID", self.e_pid), ("AT", self.e_at),
+                                        ("BT", self.e_bt), ("Priority", self.e_pr))):
+            ttk.Label(box, text=lab + ":").grid(row=1, column=k * 2, padx=(6, 0), sticky="e")
+            ent.grid(row=1, column=k * 2 + 1, padx=(2, 6), pady=4)
+
+        bar = ttk.Frame(box)
+        bar.grid(row=2, column=0, columnspan=8, pady=(2, 6))
+        ttk.Button(bar, text="Add Process", command=self.add_process).pack(side="left", padx=4)
+        ttk.Button(bar, text="Remove Selected", command=self.remove_selected).pack(side="left", padx=4)
+        ttk.Button(bar, text="Clear All", command=self.clear_all).pack(side="left", padx=4)
+        ttk.Button(bar, text="Load Sample", command=self.load_sample).pack(side="left", padx=4)
+        ttk.Button(bar, text="\u25B6 Run Simulation", command=self.run_one).pack(side="left", padx=(24, 4))
+        ttk.Button(bar, text="Compare All", command=self.run_compare).pack(side="left", padx=4)
