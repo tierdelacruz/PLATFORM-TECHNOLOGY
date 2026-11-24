@@ -86,9 +86,6 @@ class App(tk.Tk):
         notebook.add(self.tab_compare, text="Comparison")
         self.notebook = notebook
 
-    def algo_changed
-
-    def add_process(self)
         self.title_var = tk.StringVar()
         tk.Label(self.tab_result, textvariable=self.title_var,
                  font=("Segoe UI", 11, "bold"), anchor="w").pack(fill="x", padx=8, pady=(6, 0))
