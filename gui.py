@@ -111,3 +111,21 @@ class App(tk.Tk):
         self.cmp_table.pack(fill="x", padx=8, pady=8)
         self.cmp_text = tk.Label(self.tab_compare, justify="left", anchor="nw", wraplength=800)
         self.cmp_text.pack(fill="x", padx=8)
+
+    def _algo_changed(self, _event=None):
+        self.mode.config(state="readonly" if self.algo.get() == "Priority" else "disabled")
+
+    def add_process(self):
+        try:
+            pid = self.e_pid.get().strip() or f"P{len(self.table.get_children()) + 1}"
+            at, bt = int(self.e_at.get()), int(self.e_bt.get())
+            pr = int(self.e_pr.get() or 0)
+        except ValueError:
+            messagebox.showerror("Invalid input", "AT, BT and Priority must be whole numbers.")
+            return
+        self.table.insert("", "end", values=(pid, at, bt, pr))
+        for e in (self.e_pid, self.e_at, self.e_bt, self.e_pr):
+            e.delete(0, "end")
+
+    def remove_selected(self):
+        for item in self.table.selection():
