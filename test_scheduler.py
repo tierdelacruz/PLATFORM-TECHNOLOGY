@@ -84,3 +84,8 @@ def main():
         out.append("Actual   Gantt: " + " ".join(f"[{l} {s}-{e}]" for l, s, e in actual_gantt)
                    + ("   PASS" if ok_gantt else "   FAIL"))
 
+        out.append("")
+        out.append(gantt_text(r.timeline))
+        out.append("")
+        out.append(f"{'Process':<9}{'Expected CT/TAT/WT/RT':<26}{'Actual CT/TAT/WT/RT':<26}Result")
+
