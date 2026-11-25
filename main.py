@@ -86,3 +86,74 @@ def print_comparison(procs, tie, prio_pre):
         print(f"{r.algorithm:<28}{r.avg_tat:>9.2f}{r.avg_wt:>9.2f}{r.avg_rt:>9.2f}")
     print("\n" + summary)
 
+# ---------------------------------------------------------------- menu
+def menu():
+    print(LINE)
+    print("CPU SCHEDULING SIMULATOR")
+    print(LINE)
+    print("\nHow do you want to enter the processes?")
+    print("  1. Type them in")
+    print("  2. Use the sample data")
+    procs = read_processes() if ask_int("Choose 1 or 2: ", 1) == 1 else [
+        Process(p.pid, p.at, p.bt, p.pr) for p in SAMPLE_DATA]
+    tie = choose_tie_rule()
+    prio_pre = False
+
+    while True:
+        try:
+            validate_processes(procs)
+        except ValueError as err:
+            print("Input error:", err)
+            procs = read_processes()
+            continue
+        print_input(procs, tie)
+        print("\n1. FCFS")
+        print("2. SJF (Non-Preemptive)")
+        print("3. SRTF (Preemptive)")
+        print("4. Priority")
+        print("5. Compare Algorithms")
+        print("6. Enter New Processes")
+        print("7. Change Tie-Breaking Rule")
+        print("8. Open Graphical Interface")
+        print("9. Exit")
+        choice = ask_int("\nSelect option: ", 1)
+
+        if choice == 1:
+            print_result(run_algorithm("FCFS", procs, tie))
+        elif choice == 2:
+            print_result(run_algorithm("SJF", procs, tie))
+        elif choice == 3:
+            print_result(run_algorithm("SRTF", procs, tie))
+        elif choice in (4, 5):
+            prio_pre = ask_yes_no("Should Priority Scheduling be preemptive?")
+            if choice == 4:
+                print_result(run_algorithm("Priority", procs, tie, prio_pre))
+            else:
+                print_comparison(procs, tie, prio_pre)
+        elif choice == 6:
+            procs = read_processes()
+        elif choice == 7:
+            tie = choose_tie_rule()
+        elif choice == 8:
+            launch_gui()
+        elif choice == 9:
+            print("Goodbye!")
+            return
+        else:
+            print("  ! Please choose a number from 1 to 9.")
+
+
+def launch_gui():
+    try:
+        import gui
+    except ImportError as err:
+        print("The graphical interface needs Python's tkinter module:", err)
+        return
+    gui.main()
+
+
+if __name__ == "__main__":
+    if "--gui" in sys.argv:
+        launch_gui()
+    else:
+        menu()
