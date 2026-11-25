@@ -152,3 +152,36 @@ class App(tk.Tk):
 
     def _settings(self):
         return TIE_TEXT[self.tie.get()], self.mode.get() == "Preemptive"
+
+    def run_one(self):
+        try:
+            procs = self._read_processes()
+            tie, prio_pre = self._settings()
+            result = run_algorithm(self.algo.get(), procs, tie, prio_pre)
+        except ValueError as err:
+            self._set_status(f"Error: {err}", ok=False)
+            messagebox.showerror("Invalid input", str(err))
+            return
+        self.show_result(result)
+        self.notebook.select(self.tab_result)
+        self._set_status("\u2714 Simulation Completed!", ok=True)
+
+    def run_compare(self):
+        try:
+            procs = self._read_processes()
+            tie, prio_pre = self._settings()
+            results, summary = compare_all(procs, tie, prio_pre)
+        except ValueError as err:
+            self._set_status(f"Error: {err}", ok=False)
+            messagebox.showerror("Invalid input", str(err))
+            return
+        self.cmp_table.delete(*self.cmp_table.get_children())
+        for r in results:
+            self.cmp_table.insert("", "end", values=(r.algorithm, f"{r.avg_tat:.2f}",
+                                                      f"{r.avg_wt:.2f}", f"{r.avg_rt:.2f}"))
+        self.cmp_text.config(text=summary)
+        self.show_result(results[[a for a in ("FCFS", "SJF", "SRTF", "Priority")].index(self.algo.get())])
+        self.notebook.select(self.tab_compare)
+        self._set_status("\u2714 Comparison Completed!", ok=True)
+
+    # ------------------------------------------------------------ drawing
