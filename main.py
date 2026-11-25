@@ -73,3 +73,16 @@ def print_result(r):
     print(f"Average Waiting Time:    {r.avg_wt:.2f}")
     print(f"Average Response Time:   {r.avg_rt:.2f}")
     print(f"CPU Utilization:         {r.cpu_utilization:.2f}%")
+
+def print_comparison(procs, tie, prio_pre):
+    results, summary = compare_all(procs, tie, prio_pre)
+    for r in results:
+        print_result(r)
+    print("\n" + LINE)
+    print("COMPARISON OF ALGORITHMS")
+    print(LINE)
+    print(f"{'Algorithm':<28}{'Avg TAT':>9}{'Avg WT':>9}{'Avg RT':>9}")
+    for r in results:
+        print(f"{r.algorithm:<28}{r.avg_tat:>9.2f}{r.avg_wt:>9.2f}{r.avg_rt:>9.2f}")
+    print("\n" + summary)
+
