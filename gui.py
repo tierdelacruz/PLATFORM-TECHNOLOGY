@@ -129,3 +129,26 @@ class App(tk.Tk):
 
     def remove_selected(self):
         for item in self.table.selection():
+
+    def remove_selected(self):
+        for item in self.table.selection():
+            self.table.delete(item)
+
+    def clear_all(self):
+        self.table.delete(*self.table.get_children())
+
+    def load_sample(self):
+        self.clear_all()
+        for p in SAMPLE_DATA:
+            self.table.insert("", "end", values=(p.pid, p.at, p.bt, p.pr))
+
+    def _read_processes(self):
+        procs = []
+        for item in self.table.get_children():
+            pid, at, bt, pr = self.table.item(item, "values")
+            procs.append(Process(str(pid), int(at), int(bt), int(pr)))
+        validate_processes(procs)
+        return procs
+
+    def _settings(self):
+        return TIE_TEXT[self.tie.get()], self.mode.get() == "Preemptive"
