@@ -61,3 +61,19 @@ CASES = [
     },
 ]
 
+
+def main():
+    out, failures = [], 0
+    out.append("TESTING EVIDENCE - PT 101 Final Project, Topic 1 (CPU Scheduling)")
+    out.append("=" * 70)
+
+    for case in CASES:
+        procs = [Process(*p) for p in case["procs"]]
+        r = run_algorithm(case["algo"], procs, "arrival", case["prio_pre"])
+
+        out.append("")
+        out.append(case["name"])
+        out.append("-" * 70)
+        out.append("Input: " + ", ".join(f"{p[0]}(AT={p[1]}, BT={p[2]}, Prio={p[3]})"
+                                          for p in case["procs"]))
+
