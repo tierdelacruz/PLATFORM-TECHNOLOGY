@@ -89,3 +89,11 @@ def main():
         out.append("")
         out.append(f"{'Process':<9}{'Expected CT/TAT/WT/RT':<26}{'Actual CT/TAT/WT/RT':<26}Result")
 
+        ok_metrics = True
+        for p in r.processes:
+            exp = case["metrics"][p.pid]
+            act = (p.ct, p.tat, p.wt, p.rt)
+            good = exp == act
+            ok_metrics &= good
+            out.append(f"{p.pid:<9}{str(exp):<26}{str(act):<26}{'PASS' if good else 'FAIL'}")
+
