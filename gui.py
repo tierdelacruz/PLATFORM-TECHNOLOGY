@@ -129,9 +129,6 @@ class App(tk.Tk):
 
     def remove_selected(self):
         for item in self.table.selection():
-
-    def remove_selected(self):
-        for item in self.table.selection():
             self.table.delete(item)
 
     def clear_all(self):
@@ -184,4 +181,46 @@ class App(tk.Tk):
         self.notebook.select(self.tab_compare)
         self._set_status("\u2714 Comparison Completed!", ok=True)
 
-    # ------------------------------------------------------------ drawing
+    def _set_status(self, text, ok):
+        self.status.set(text)
+        self.status_label.config(bg="#d4edda" if ok else "#f8d7da")
+
+    def show_result(self, r):
+        self.title_var.set(f"{r.algorithm}  (total time: {r.total_time})")
+        self._draw_gantt(r)
+        self.result_table.delete(*self.result_table.get_children())
+        for p in r.processes:
+            self.result_table.insert("", "end", values=(p.pid, p.at, p.bt, p.pr, p.ct, p.tat, p.wt, p.rt))
+        self.avg_var.set(f"Average Turnaround Time: {r.avg_tat:.2f}\n"
+                         f"Average Waiting Time:    {r.avg_wt:.2f}\n"
+                         f"Average Response Time:   {r.avg_rt:.2f}\n"
+                         f"CPU Utilization:         {r.cpu_utilization:.2f}%")
+
+    def _draw_gantt(self, r):
+        c = self.canvas
+        c.delete("all")
+        self.update_idletasks()
+        width = max(c.winfo_width(), 600)
+        left, top, height = 20, 15, 42
+        scale = (width - 2 * left) / r.total_time
+        pids = [p.pid for p in r.processes]
+        last_label_end = -100
+        for label, start, end in r.timeline:
+            x1, x2 = left + start * scale, left + end * scale
+            color = IDLE_COLOR if label == "Idle" else COLORS[pids.index(label) % len(COLORS)]
+            c.create_rectangle(x1, top, x2, top + height, fill=color, outline="#333")
+            c.create_text((x1 + x2) / 2, top + height / 2, text=label,
+                          font=("Segoe UI", 10, "bold"))
+            if x1 - last_label_end >= 4:                       # avoid overlapping numbers
+                c.create_text(x1, top + height + 12, text=str(start), font=("Segoe UI", 9))
+                last_label_end = x1 + 8 * len(str(start))
+        c.create_text(left + r.total_time * scale, top + height + 12,
+                      text=str(r.total_time), font=("Segoe UI", 9))
+
+
+def main():
+    App().mainloop()
+
+
+if __name__ == "__main__":
+    main()
