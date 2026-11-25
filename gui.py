@@ -89,6 +89,26 @@ class App(tk.Tk):
         self.title_var = tk.StringVar()
         tk.Label(self.tab_result, textvariable=self.title_var,
                  font=("Segoe UI", 11, "bold"), anchor="w").pack(fill="x", padx=8, pady=(6, 0))
-        self.canvas = tk.Canvas(self.tab_result, height=100, bg="white",
+       self.canvas = tk.Canvas(self.tab_result, height=100, bg="white",
                                 highlightthickness=1, highlightbackground="#bbb")
         self.canvas.pack(fill="x", padx=8, pady=6)
+
+        cols = ("pid", "at", "bt", "pr", "ct", "tat", "wt", "rt")
+        self.result_table = ttk.Treeview(self.tab_result, columns=cols, show="headings", height=6)
+        for c, t in zip(cols, ("Process", "AT", "BT", "Priority", "CT", "TAT", "WT", "RT")):
+            self.result_table.heading(c, text=t)
+            self.result_table.column(c, width=90, anchor="center")
+        self.result_table.pack(fill="x", padx=8)
+        self.avg_var = tk.StringVar()
+        tk.Label(self.tab_result, textvariable=self.avg_var, justify="left", anchor="w",
+                 font=("Consolas", 10)).pack(fill="x", padx=8, pady=6)
+
+        # --- Comparison tab
+        cols2 = ("algo", "tat", "wt", "rt")
+        self.cmp_table = ttk.Treeview(self.tab_compare, columns=cols2, show="headings", height=5)
+        for c, t, w in zip(cols2, ("Algorithm", "Avg TAT", "Avg WT", "Avg RT"), (260, 110, 110, 110)):
+            self.cmp_table.heading(c, text=t)
+            self.cmp_table.column(c, width=w, anchor="center")
+        self.cmp_table.pack(fill="x", padx=8, pady=8)
+        self.cmp_text = tk.Label(self.tab_compare, justify="left", anchor="nw", wraplength=800)
+        self.cmp_text.pack(fill="x", padx=8)
