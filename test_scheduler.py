@@ -8,3 +8,25 @@ The ACTUAL values come from the program. A test passes only when they match.
 Run:  python test_scheduler.py
 It prints the evidence and also saves it to testing_evidence.txt
 """
+
+import sys
+from scheduler import Process, run_algorithm, gantt_text
+
+CASES = [
+    {
+        "name": "Test Case 1 - FCFS (all arrive at 0)",
+        "algo": "FCFS", "prio_pre": False,
+        "procs": [("P1", 0, 24, 0), ("P2", 0, 3, 0), ("P3", 0, 3, 0)],
+        "gantt": [("P1", 0, 24), ("P2", 24, 27), ("P3", 27, 30)],
+        "metrics": {"P1": (24, 24, 0, 0), "P2": (27, 27, 24, 24), "P3": (30, 30, 27, 27)},
+        "avg": (27.00, 17.00, 17.00),
+    },
+    {
+        "name": "Test Case 2 - SJF non-preemptive (tie: P2 and P4 both BT 4)",
+        "algo": "SJF", "prio_pre": False,
+        "procs": [("P1", 0, 7, 0), ("P2", 2, 4, 0), ("P3", 4, 1, 0), ("P4", 5, 4, 0)],
+        "gantt": [("P1", 0, 7), ("P3", 7, 8), ("P2", 8, 12), ("P4", 12, 16)],
+        "metrics": {"P1": (7, 7, 0, 0), "P2": (12, 10, 6, 6),
+                    "P3": (8, 4, 3, 3), "P4": (16, 11, 7, 7)},
+        "avg": (8.00, 4.00, 4.00),
+    },
