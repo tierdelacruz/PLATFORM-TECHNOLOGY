@@ -103,7 +103,6 @@ class App(tk.Tk):
         tk.Label(self.tab_result, textvariable=self.avg_var, justify="left", anchor="w",
                  font=("Consolas", 10)).pack(fill="x", padx=8, pady=6)
 
-        # --- Comparison tab
         cols2 = ("algo", "tat", "wt", "rt")
         self.cmp_table = ttk.Treeview(self.tab_compare, columns=cols2, show="headings", height=5)
         for c, t, w in zip(cols2, ("Algorithm", "Avg TAT", "Avg WT", "Avg RT"), (260, 110, 110, 110)):
