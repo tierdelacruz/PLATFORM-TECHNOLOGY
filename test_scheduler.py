@@ -77,3 +77,10 @@ def main():
         out.append("Input: " + ", ".join(f"{p[0]}(AT={p[1]}, BT={p[2]}, Prio={p[3]})"
                                           for p in case["procs"]))
 
+        actual_gantt = [tuple(seg) for seg in r.timeline]
+        ok_gantt = actual_gantt == case["gantt"]
+        out.append("")
+        out.append("Expected Gantt: " + " ".join(f"[{l} {s}-{e}]" for l, s, e in case["gantt"]))
+        out.append("Actual   Gantt: " + " ".join(f"[{l} {s}-{e}]" for l, s, e in actual_gantt)
+                   + ("   PASS" if ok_gantt else "   FAIL"))
+
