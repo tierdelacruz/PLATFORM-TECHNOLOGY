@@ -269,3 +269,10 @@ def results_table(result: Result) -> str:
     return "\n".join(lines)
 
 
+SAMPLE_DATA = [          # classic example used for demos
+    Process("P1", 0, 7, 3),
+    Process("P2", 2, 4, 1),
+    Process("P3", 4, 1, 4),
+    Process("P4", 5, 4, 2),
+]
+
