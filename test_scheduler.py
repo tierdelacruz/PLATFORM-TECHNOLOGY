@@ -96,4 +96,26 @@ def main():
             good = exp == act
             ok_metrics &= good
             out.append(f"{p.pid:<9}{str(exp):<26}{str(act):<26}{'PASS' if good else 'FAIL'}")
+       act_avg = (round(r.avg_tat, 2), round(r.avg_wt, 2), round(r.avg_rt, 2))
+        ok_avg = act_avg == case["avg"]
+        out.append("")
+        out.append(f"Expected averages (TAT, WT, RT): {case['avg']}")
+        out.append(f"Actual averages (TAT, WT, RT): {act_avg} {'PASS' if ok_avg else 'FAIL'}")
 
+        passed = ok_gantt and ok_metrics and ok_avg
+        failures += 0 if passed else 1
+        out.append(f"RESULT: {'PASSED' if passed else 'FAILED'}")
+
+    out.append("")
+    out.append("=" * 70)
+    out.append(f"SUMMARY: {len(CASES) - failures} of {len(CASES)} test cases passed.")
+
+    text = "\n".join(out)
+    print(text)
+    with open("testing_evidence.txt", "w", encoding="utf-8") as f:
+        f.write(text + "\n")
+    return 1 if failures else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
