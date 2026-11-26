@@ -270,7 +270,7 @@ def results_table(result: Result) -> str:
     return "\n".join(lines)
 
 
-SAMPLE_DATA = [          # Classic example used for demo.
+SAMPLE_DATA = [          # Classic example used for demos.
     Process("P1", 0, 7, 3),
     Process("P2", 2, 4, 1),
     Process("P3", 4, 1, 4),
