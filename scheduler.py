@@ -262,7 +262,7 @@ def gantt_text(timeline, max_width: int = 76) -> str:
 
 
 def results_table(result: Result) -> str:
-    """""Per-process table: PID, AT, BT, Priority, CT, TAT, WT, RT."""""""
+    """""""Per-process table: PID, AT, BT, Priority, CT, TAT, WT, RT."""""""
     head = f"{'Process':<9}{'AT':>5}{'BT':>5}{'Prio':>6}{'CT':>6}{'TAT':>6}{'WT':>6}{'RT':>6}"
     lines = [head, "-" * len(head)]
     for p in result.processes:
