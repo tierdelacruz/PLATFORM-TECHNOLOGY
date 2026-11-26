@@ -169,6 +169,7 @@ def _simulate(procs: List[Process], pick_key, preemptive: bool, name: str) -> Re
     )
     return result
 
+
 # --------------------------------------------------------------------------
 # The four algorithms
 # --------------------------------------------------------------------------
