@@ -242,7 +242,7 @@ def gantt_text(timeline, max_width: int = 76) -> str:
     if current:
         rows.append(current)
 
-    out = []
+        out = []
     for row in rows:
         bar = "|"
         marks = [(0, str(row[0][1]))]
