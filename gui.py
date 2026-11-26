@@ -89,7 +89,7 @@ class App(tk.Tk):
         self.title_var = tk.StringVar()
         tk.Label(self.tab_result, textvariable=self.title_var,
                  font=("Segoe UI", 11, "bold"), anchor="w").pack(fill="x", padx=8, pady=(6, 0))
-       self.canvas = tk.Canvas(self.tab_result, height=100, bg="white",
+        self.canvas = tk.Canvas(self.tab_result, height=100, bg="white",
                                 highlightthickness=1, highlightbackground="#bbb")
         self.canvas.pack(fill="x", padx=8, pady=6)
 
