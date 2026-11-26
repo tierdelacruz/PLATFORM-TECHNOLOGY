@@ -110,6 +110,7 @@ def main():
     out.append("=" * 70)
     out.append(f"SUMMARY: {len(CASES) - failures} of {len(CASES)} test cases passed.")
 
+
     text = "\n".join(out)
     print(text)
     with open("testing_evidence.txt", "w", encoding="utf-8") as f:
