@@ -168,3 +168,110 @@ def _simulate(procs: List[Process], pick_key, preemptive: bool, name: str) -> Re
         cpu_utilization=(busy / time * 100) if time else 0.0,
     )
     return result
+
+# --------------------------------------------------------------------------
+# The four algorithms
+# --------------------------------------------------------------------------
+def fcfs(procs, tie="arrival") -> Result:
+    return _simulate(procs, lambda p, i: (p.at, _tie_key(p, i, tie)), False, "FCFS")
+
+
+def sjf(procs, tie="arrival") -> Result:
+    return _simulate(procs, lambda p, i: (p.bt, _tie_key(p, i, tie)), False, "SJF (Non-Preemptive)")
+
+
+def srtf(procs, tie="arrival") -> Result:
+    return _simulate(procs, lambda p, i: (p.remaining, _tie_key(p, i, tie)), True, "SRTF (Preemptive)")
+
+
+def priority(procs, tie="arrival", preemptive=False) -> Result:
+    mode = "Preemptive" if preemptive else "Non-Preemptive"
+    return _simulate(procs, lambda p, i: (p.pr, _tie_key(p, i, tie)), preemptive, f"Priority ({mode})")
+
+
+def run_algorithm(name: str, procs, tie="arrival", priority_preemptive=False) -> Result:
+    name = name.strip().upper()
+    if name == "FCFS":
+        return fcfs(procs, tie)
+    if name == "SJF":
+        return sjf(procs, tie)
+    if name == "SRTF":
+        return srtf(procs, tie)
+    if name == "PRIORITY":
+        return priority(procs, tie, priority_preemptive)
+    raise ValueError(f"Unknown algorithm: {name}")
+
+
+# --------------------------------------------------------------------------
+# Comparison
+# --------------------------------------------------------------------------
+def compare_all(procs, tie="arrival", priority_preemptive=False):
+    """Run all four algorithms. Returns (list_of_results, short_comparison_text)."""
+    results = [run_algorithm(a, procs, tie, priority_preemptive) for a in ALGORITHMS]
+    lines = []
+    for label, attr in (("Average Waiting Time", "avg_wt"),
+                        ("Average Turnaround Time", "avg_tat"),
+                        ("Average Response Time", "avg_rt")):
+        best = min(getattr(r, attr) for r in results)
+        winners = [r.algorithm for r in results if abs(getattr(r, attr) - best) < 1e-9]
+        lines.append(f"Lowest {label}: {best:.2f} -> {', '.join(winners)}")
+    lines.append("Note: a lower average is better. Priority Scheduling depends on the priority "
+                 "numbers you entered, so it can be better or worse than the others.")
+    return results, "\n".join(lines)
+
+
+# --------------------------------------------------------------------------
+# Text Gantt chart (used by the console program and the test evidence)
+# --------------------------------------------------------------------------
+def gantt_text(timeline, max_width: int = 76) -> str:
+    """
+    Build a Gantt chart like:
+        | P1 | P2 | Idle | P3 |
+        0    3    6      8    10
+    Long charts are wrapped onto several rows.
+    """
+    rows, current = [], []
+    width = 1
+    for seg in timeline:
+        cell_w = max(len(seg[0]) + 2, len(str(seg[2])) + 2, 5)
+        if current and width + cell_w + 1 > max_width:
+            rows.append(current)
+            current, width = [], 1
+        current.append(seg)
+        width += cell_w + 1
+    if current:
+        rows.append(current)
+
+    out = []
+    for row in rows:
+        bar = "|"
+        marks = [(0, str(row[0][1]))]
+        for label, start, end in row:
+            cell_w = max(len(label) + 2, len(str(end)) + 2, 5)
+            bar += label.center(cell_w) + "|"
+            marks.append((len(bar) - 1, str(end)))
+        axis = [" "] * (len(bar) + 6)
+        for pos, text in marks:
+            for k, ch in enumerate(text):
+                axis[pos + k] = ch
+        out.append(bar)
+        out.append("".join(axis).rstrip())
+        out.append("")
+    return "\n".join(out).rstrip()
+
+
+def results_table(result: Result) -> str:
+    """Per-process table: PID, AT, BT, Priority, CT, TAT, WT, RT."""
+    head = f"{'Process':<9}{'AT':>5}{'BT':>5}{'Prio':>6}{'CT':>6}{'TAT':>6}{'WT':>6}{'RT':>6}"
+    lines = [head, "-" * len(head)]
+    for p in result.processes:
+        lines.append(f"{p.pid:<9}{p.at:>5}{p.bt:>5}{p.pr:>6}{p.ct:>6}{p.tat:>6}{p.wt:>6}{p.rt:>6}")
+    return "\n".join(lines)
+
+
+SAMPLE_DATA = [          # classic example used for demos
+    Process("P1", 0, 7, 3),
+    Process("P2", 2, 4, 1),
+    Process("P3", 4, 1, 4),
+    Process("P4", 5, 4, 2),
+]
