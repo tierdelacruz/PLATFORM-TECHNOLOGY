@@ -47,6 +47,7 @@ class Process:
     first_start: int = -1
     remaining: int = 0
 
+
 @dataclass
 class Result:
     algorithm: str
